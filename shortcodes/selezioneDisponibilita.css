@@ -1,0 +1,35 @@
+#selezione_disponibilita{
+    background-color: rgb(52, 52, 52);
+    display: flex;
+    align-items: flex-start;
+    width: 80%;
+    position: relative;
+    margin: 0 auto;
+    #orari{
+        width: fit-content;
+    }
+    #riepilogo{
+        flex-grow: 1;
+        *{
+    color: black;
+}
+    }
+    #timepicker{
+        height: 300px;
+        overflow-y: scroll;
+        p{
+            cursor: pointer;
+        }
+    }
+}
+#selezionaTeam{
+    display: none;
+    color: red;
+}
+#wrapper_button{
+    color: black;
+    text-align: center;
+}
+.active{
+    background-color: rgba(3, 211, 3, 0.605);
+}

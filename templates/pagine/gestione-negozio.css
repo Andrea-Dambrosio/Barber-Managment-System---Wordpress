@@ -1,0 +1,82 @@
+html,body{
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+.container-fluid{
+    height: 89%;
+}
+.row{
+    height: 100%;
+}
+.col-9 section{
+    display: none;
+}
+.col-9 > section:first-child{
+    display: block;
+}
+.wrapper p{
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+#giorniPresenti{
+    overflow-y: auto;
+    height: 100%;
+    width: 50%;
+    .template:last-child{
+        border-bottom: none;
+    }
+}
+#giorniPresenti > div > div{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.wrapper p:hover{
+    background-color: gray;
+}
+.template{
+    border-bottom: 1px solid black;
+    padding: 10px 0;
+    p{
+        text-align: center;
+    }
+    .nomi{
+        width: 40%;
+        min-width: fit-content;
+    }
+}
+.template i{
+    cursor: pointer;
+}
+    #formOrariNegozio {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.15);
+        padding-top: 50px;
+        position: relative;
+    }
+    #formOrariNegozio .row {
+        margin-bottom: 10px;
+    }
+    #formOrariNegozio .row p {
+        font-weight: bold;
+        color: #495057;
+    }
+    #formOrariNegozio .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    #formOrariNegozio .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    .colonna{
+        font-weight: bold;
+        position: absolute;
+        top: 10px;
+    }

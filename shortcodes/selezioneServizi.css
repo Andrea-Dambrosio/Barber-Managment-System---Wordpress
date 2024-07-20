@@ -1,0 +1,121 @@
+* {
+    color: black;
+}
+#scelta_servizi {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    > :first-child {
+        width: fit-content;
+    }
+    ul.listaServizi {
+        display: none;
+        width: 50%;
+    }
+    ul.listaServizi.active {
+        display: block;
+    }
+}
+.listaServizi li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    > :first-child {
+        width: 80%;
+        p {
+            margin-bottom: 0;
+        }
+    }
+    > :last-child {
+        > * {
+            display: inline-block;
+        }
+    }
+}
+#servizi_selezionati {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    width: 70vw;
+    left: 15vw;
+    align-items: center;
+    height: 80px;
+    justify-content: space-between;
+    background-color: rgb(0, 12, 79);
+}
+#servizi_selezionati.active {
+    display: flex;
+}
+button.active {
+    /* background-color: green ; */
+}
+
+#categories {
+    list-style-type: none;
+    margin-left: 0;
+    margin-right: 20px;
+}
+
+#categories li {
+    padding: 10%;
+}
+#poupup {
+    display: none;
+    position: fixed;
+    top: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    background-color: #f2f2f2;
+    box-shadow: 0px 0px 6px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 1000;
+    border-radius: 5px;
+    text-align: center;
+}
+#poupup.active {
+    display: block;
+}
+#poupup h2 , p{
+	text-align : center;
+}
+#poupup h2
+{
+	font-size : 1.2em;
+}
+#poupup p
+{
+	font-size : 0.8em;
+}
+#poupup span {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.dettagli:hover {
+    color: darkred; /* Cambia il colore al passaggio del mouse su tonalità di rosso */
+    text-decoration: none; /* Rimuove il sottolineato al passaggio del mouse */
+}
+
+.dettagli:active {
+    color: blue; /* Cambia il colore al click su rosso */
+}
+.dettagli {
+    color: #BD1622;;
+    text-decoration: underline;
+}
+
+.listaServizi li.active{
+	
+	div, p, span, button
+	{
+		color : #dadada;
+		border-color : #dadada;
+	}
+}
+
+	

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__); ?>trattamenti.css">
+    <script src="<?php echo plugin_dir_url(__FILE__); ?>trattamenti.js"></script>
+
+    <title>Gestionale > Trattamenti</title>
+</head>
+
+<body class="bg-light">
+    <div id="menu" class="p-3 mb-2 bg-primary text-white">
+        <h2>Gestione Servizi</h2>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 bg-white p-3 border-right">
+                <ul class="nav nav-pills nav-justified">
+                    <li class="nav-item">
+                        <a id = "servizi-nav"class="nav-link active" onclick="mostraServizi()" aria-current="page" >Servizi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id = "categorie-nav" class="nav-link" onclick="mostraCategorie()">Categorie</a>
+                    </li>
+                    
+                </ul>
+                <!-- Sidebar -->
+                <div class = "servizi">
+                <div  class="input-group mb-3">
+                    <input id="ricerca" type="text" class="form-control" placeholder="Cerca">
+                    <i id="create" class="far fa-plus-square fa-lg" style="color: #74C0FC;"></i>
+                </div>
+                <div class="wrapper">
+                    <div id="servizi">
+
+                    </div>
+                </div>
+                </div>
+                <div class = "categorie">
+                    <div class="input-group mb-3">
+                        <input id="ricerca-categorie" type="text" class="form-control" placeholder="Cerca">
+                        <i id="create-categoria" class="far fa-plus-square fa-lg" style="color: #74C0FC;"></i>
+                    </div>
+                    <div class="wrapper">
+                        <div id="categorie">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-9">
+                <!-- Page Content -->
+                <form id="trattamento" class="p-5 bg-light rounded">
+                    <h1 class="mb-4">Informazioni trattamento</h1>
+                    <div class="mb-3">
+                        <label for="nome-servizio" class="form-label">Nome servizio</label>
+                        <input type="text" class="form-control" id="nome-servizio" maxlength="100" placeholder="Inserisci un nome">
+                    </div>
+                    <div class="mb-3">
+                        <label for="prezzo" class="form-label">Prezzo</label>
+                        <input type="text" class="form-control" id="prezzo" required placeholder="Inserisci un prezzo">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for = "durata">Durata</label>
+                        <select id="durata" class="form-control">
+                            <option value="00:10:00">0.10h</option>
+                            <option value="00:20:00">0.20h</option>
+                            <option value="00:30:00">0.30h</option>
+                            <option value="00:40:00">0.40h</option>
+                            <option value="00:50:00">0.50h</option>
+                            <option value="01:00:00">1.00h</option>
+                            <option value="01:10:00">1.10h</option>
+                            <option value="01:20:00">1.20h</option>
+                            <option value="01:30:00">1.30h</option>
+                            <option value="01:40:00">1.40h</option>
+                            <option value="01:50:00">1.50h</option>
+                            <option value="02:00:00">2.00h</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id = "membri">
+                        <p>Membri abilitati</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="membro1">
+                            <label class="form-check-label" for="membro1">Membro 1</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoria-select" class="form-label">Categoria</label>
+                        <select class="form-select" id="categoria-select" required>
+                            <option value = "" selected disabled>Scegli una categoria...</option>
+                           
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descrizione" class="form-label">Descrizione (max 200)</label>
+                        <textarea class="form-control" id="descrizione" rows="3" required maxlength="200"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Aggiorna Dati</button>
+                    <i id="elimina-servizio" class="fas fa-trash-alt"></i>
+
+                </form>
+
+
+                <form id = "categoria-form">
+                    <h1 class="mt-4" id="title">Nome categorie</h1>
+                    <div class="mb-3">
+                        <label for="nomeCategoria" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nomeCategoria" required placeholder="Inserisci un nome">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Aggiorna Dati</button>
+                </form>
+                <div id = "seleziona">
+                    <i class="fas fa-cut"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

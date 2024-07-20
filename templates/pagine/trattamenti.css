@@ -1,0 +1,100 @@
+html,body{
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+.container-fluid{
+    height: 89%;
+
+}
+#elimina-servizio{
+     color: #ff0000;
+    position: relative;
+    left: 83%;
+    bottom: 0;
+}
+   
+.row{
+    height: 100%;
+}
+.col-3{
+    height: 100%;
+    border-right: solid 1px #2d2d2dc8;
+    padding-top: 20px;
+}
+.col-3 .wrapper{
+    overflow: auto;
+    height: 69vh;
+}
+#servizi, #categorie{
+    padding-top: 40px;
+    p{
+        border: 0.5px solid #2d2d2dd3;
+        width: 95%;
+        margin: 0 auto;
+        padding: 20px 0;
+        border-left: none;
+        border-right: none;
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
+    }
+    p:hover{
+        background-color: #8585854e;
+    }
+}
+#menu{
+    height: 9%;
+}
+.col-9{
+    height: 100%;
+    overflow: auto;
+}
+#dati-trattamenti{
+    padding: 30px 30% 0 0;
+}
+#titolo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.categorie{
+    display: none;
+}
+#categoria-form{
+    display: none;
+}
+#create{
+    height: 48px;
+}
+.nav-item{
+    cursor: pointer;
+}
+#trattamento{
+    display: none;
+}
+#ricerca, #ricerca-categorie{
+    width: 85%;
+    display: inline-block;
+}
+#seleziona{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    i::before{
+        font-size: 176px;
+    }
+}
+#create-categoria::before{
+       font-size: 1.93333em;
+    line-height: 1.15em;
+}
+
+#create::before{
+    font-size: 1.93333em;
+    line-height: 1.15em;
+}
+

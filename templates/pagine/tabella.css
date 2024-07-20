@@ -1,0 +1,61 @@
+.table th,
+.table td {
+    border: 2px solid #dee2e6;
+}
+iframe{
+    display: none;
+}
+.container{
+     page-break-after: always;
+}
+
+/* Clienti */
+tbody tr :nth-child(1){
+    background-color: rgba(255, 193, 7, 0.236);
+}
+/* Prodotti */
+tbody tr :nth-child(2){
+    background-color: rgba(253, 13, 117, 0.252);
+}
+tbody tr :nth-child(n+3){
+    background-color: rgb(0 102 255 / 46%);;
+}
+/* RIVENDITA */
+tbody tr :nth-last-child(2){
+    background-color: transparent ;
+}
+tbody tr :last-child{
+    background-color: rgba(13, 253, 93, 0.236) !important;
+}
+.total{
+        border-top-width: 3px;
+    border-top-color: black;
+}
+
+.border_bottom{
+    border-bottom-width: 3px;
+    border-bottom-color: black;
+}
+.border_top{
+    border-top-width: 3px;
+    border-top-color: black;
+}
+.border_full{
+    border-top-width: 3px;
+    border-top-color: black;
+    border-bottom-width: 3px;
+    border-bottom-color: black;
+}
+.start_team{
+    border-top-width: 3px;
+    border-top-color: black;
+}
+.end_team{
+    border-bottom-width: 3px;
+    border-bottom-color: black;
+}
+@media print {
+    button, #open-menu {
+        display: none !important;
+    }
+}

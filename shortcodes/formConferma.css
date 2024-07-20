@@ -1,0 +1,20 @@
+/* styles.css */
+
+.container {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    height: 100vh;
+    color: white;
+}
+
+.left-content {
+    flex: 1;
+}
+
+.right-content {
+    position: sticky;
+    top: 0px !important;
+	margin-top : 0 !important;
+    align-self: flex-start;
+}

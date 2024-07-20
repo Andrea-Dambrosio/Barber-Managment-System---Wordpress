@@ -1,0 +1,87 @@
+<i id="open-menu" class="fas fa-ellipsis-h"></i>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="menuLaterale" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Menu</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a href="/gestionale-barberia">
+            <i class="far fa-calendar-minus"></i> Calendario
+        </a>
+        <a href="/tabella">
+            <i class="fas fa-table"></i> Riepilogo giornaliero
+        </a>
+        <a href="/clienti">
+            <i class="fas fa-users"></i> Clienti
+        </a>
+        <a href="/trattamenti" class="desk admin">
+            <i class="fas fa-cut"></i> Servizi
+        </a>
+        <a href="/prodotti" class="desk admin">
+            <i class="fas fa-tag"></i> Prodotti
+        </a>
+        <a href="/negozio" class="desk admin">
+            <i class="fas fa-store"></i> Gestione Negozio
+        </a>
+        <a href="/wp-admin/users.php" class="desk admin">
+            <i class="fas fa-users-cog"></i> Team
+        </a>
+    </div>
+</div>
+<style>
+    #menuLaterale>div.offcanvas-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        padding-bottom: 93%;
+        align-items: start;
+        font-size: 20px;
+
+        a {
+            width: 220px;
+
+        }
+    }
+
+    #open-menu {
+        position: fixed !important;
+        top: 3px;
+        color: #00ffab;
+        right: 20px;
+        font-size: 3em;
+        cursor: pointer;
+    }
+
+    @media screen and (max-width: 768px) {
+        .desk {
+            display: none;
+        }
+
+        #menuLaterale>div.offcanvas-body {
+            align-items: end;
+        padding-bottom: 120%;
+
+            a {
+                text-align: right;
+                font-size: 22px;
+            }
+        }
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuLaterale = new bootstrap.Offcanvas("#menuLaterale");
+        document.getElementById("open-menu").addEventListener("click", function () {
+            menuLaterale.show();
+        });
+        try{
+            if(!adminRole){
+                document.querySelectorAll(".admin").forEach(el => el.style.display = "none");
+            }
+
+        }catch(e){
+            console.warn("Admin role not defined");
+        }
+    });
+
+</script>

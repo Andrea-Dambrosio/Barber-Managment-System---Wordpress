@@ -1,0 +1,206 @@
+body,
+html {
+    height: 100dvh;
+    overflow: hidden;
+}
+body {
+    margin: 4px !important;
+}
+#pagamentoEffettuato {
+    display: none;
+    color: #0cbb18;
+}
+#calendar {
+    height: 100dvh;
+}
+.fc-toolbar-title {
+    text-transform: capitalize;
+}
+form.active {
+    opacity: 1;
+    height: initial;
+    display: block !important;
+}
+form {
+    height: 0;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+body > span {
+    z-index: 99999;
+}
+#pagamentoForm {
+    display: none;
+}
+#calendar
+    > div.fc-view-harness.fc-view-harness-active
+    > div
+    > table
+    > thead
+    > tr
+    > th
+    > div
+    > div {
+    overflow: hidden !important;
+}
+.fc-col-header-cell-cushion {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 68px;
+}
+.fc-event {
+    transition: transform 0.2s ease-in-out;
+}
+.fc-event:hover {
+    transform: scale(1.02);
+}
+.lunch-event:hover,
+.chiusura-eccezionale:hover {
+    transform: scale(1) !important;
+}
+#calendar button.fc-menuLaterale-button {
+    position: fixed;
+    right: 5px;
+    height: 41px;
+}
+.fc-header-toolbar {
+    padding-right: 77px;
+}
+#overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(0 0 0 / 60%);
+    z-index: 2;
+    cursor: not-allowed;
+}
+.scorrimento {
+    overflow-y: auto;
+    height: 50vh;
+    padding: 0 20px;
+}
+.popover {
+    width: 350px;
+    max-width: none !important;
+    > * {
+        width: 100%;
+    }
+}
+#pagamentoClick {
+    cursor: pointer;
+    width: fit-content;
+    color: #007bff;
+    transition: text-decoration 0.3s ease-in-out;
+}
+#pagamentoCLick:hover {
+    text-decoration: underline;
+}
+#realTimeManagment {
+    margin-top: 5px;
+}
+#evento[data-type="create"] {
+    #realTimeManagment,
+    #realTimeManagment {
+        display: none;
+    }
+}
+.pulsantiPoupup {
+    margin-top: 20px;
+    padding: 0 20px;
+    > div:first-child {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        display: flex;
+        gap: 10px;
+    }
+}
+.fc-datePicker-button::before {
+    font-family: "Font Awesome 5 Free";
+    content: "\f073"; /* Questo è il codice Unicode per l'icona del calendario in FontAwesome */
+}
+div.fc-header-toolbar.fc-toolbar > div:nth-child(1) > div {
+    display: flex;
+    column-gap: 10px;
+}
+#datePicker {
+    all: unset;
+    width: 0;
+    height: 0;
+    position: fixed;
+}
+#elimina-appuntamento {
+    cursor: pointer;
+    color: red;
+}
+#evento {
+    overflow-y: hidden;
+}
+#close {
+    border: none;
+    background: #ff00003b;
+    border-radius: 7px;
+    position: absolute;
+    top: 0px;
+    right: 0;
+    cursor: pointer;
+}
+
+#lista_clienti {
+    overflow-y: auto;
+    display: none;
+    border-radius: 5px;
+    position:absolute;
+    border: #63636378 1px solid;
+    top: 117px;
+    background: #ffffff;
+    height: 60%;
+    width: 80%;
+    p {
+        border: solid #63636378;
+        border-width: 0.5px 0;
+        margin: 0;
+        padding: 8px 0;
+        padding-left: 6px;
+        transition: background-color 0.3s ease-in-out;
+        cursor: pointer;
+    }
+    p:hover, p:active {
+        background-color: #5897fb;
+    }
+
+}
+tbody.adminTable > tr > td:nth-child(3n + 2) {
+    border-left: 2px solid rgb(0, 0, 0) !important;
+}
+
+tbody.adminTable > tr > td:nth-child(3n + 4) {
+    border-right: 2px solid rgb(0, 0, 0) !important;
+}
+@media (max-width: 768px) {
+    .modifica-evento.popover {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+    .popover-arrow {
+        display: none !important;
+    }
+    .scorrimento {
+        height: 58vh;
+    }
+    #close{
+        height: 36px;
+        width: 36px;
+        vertical-align: middle;
+        display: table-cell;
+        font-size: 22px;
+    }
+}

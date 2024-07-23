@@ -21,7 +21,7 @@ function clientElements() {
     }
 }
 function aggiungiClienti(form) {
-    fetch("/wp-json/gestionale/v1/admin/clienti/")
+    fetch("/wp-json/gestionale/v1/admin/clienti/?_wpnonce=" + nonce)
         .then((response) => response.json())
         .then((data) => mostra(data))
         .catch((error) => console.error("Error:", error));
@@ -146,6 +146,7 @@ function creaEdElimina(form, button, mobile) {
                 headers: {
                     "Content-Type": "application/json",
                     type: "delete",
+                    "X-WP-Nonce": nonce,
                 },
                 body: JSON.stringify(cliente),
             })
@@ -187,13 +188,17 @@ function inputForm(form) {
             headers: {
                 "Content-Type": "application/json",
                 type: form.type,
+                "X-WP-Nonce": nonce
             },
             body: JSON.stringify(cliente),
         })
             .then((response) => response.json())
             .then((data) => {
                 if (data != "OK") {
-                    alert("Operazione non consentita dal server" + JSON.stringify(data));
+                    alert(
+                        "Operazione non consentita dal server" +
+                            JSON.stringify(data)
+                    );
                     console.error("Error:", data);
                     return;
                 }
@@ -216,14 +221,17 @@ function inputForm(form) {
             headers: {
                 "Content-Type": "application/json",
                 type: form.type,
-                token: "{64y!Z2Ct*TTd34.*+Wb#Jh0QeV;s5",
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(cliente),
         })
             .then((response) => response.json())
             .then((data) => {
                 if (data != "OK") {
-                    alert("Operazione non consentita dal server" + JSON.stringify(data));
+                    alert(
+                        "Operazione non consentita dal server" +
+                            JSON.stringify(data)
+                    );
                     console.warn("Error:", data);
                     return;
                 }

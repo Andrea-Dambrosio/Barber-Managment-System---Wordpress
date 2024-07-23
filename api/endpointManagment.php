@@ -25,7 +25,7 @@ function createEndpoints(){
                 'methods' => ['GET', 'POST', 'DELETE'],
                 'callback' => 'handle' . ucfirst($endpoint),
                 'permission_callback' => function () {
-                    return true;
+                    return current_user_can('gestionale_barberia');
                 }
             ]
         );
@@ -41,23 +41,6 @@ function createEndpoints(){
         );
     }
     
-
-    // register_rest_route(
-    //     'gestionale/v1',
-    //     '/prodotti/',
-    //     array(
-    //         'methods' => ['GET', 'POST', 'DELETE'],
-    //         'callback' => 'handleProdotti',
-    //     )
-    // );
-    // register_rest_route(
-    //     'gestionale/v1',
-    //     '/tabella/',
-    //     array(
-    //         'methods' => ['GET'],
-    //         'callback' => 'handleTabella',
-    //     )
-    // );
     // register_rest_route(
     //     'gestionale/clienti',
     //     '/serviziPrenotazioni/',

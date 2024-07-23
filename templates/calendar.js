@@ -14,7 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
 caricaDati();
 function caricaDati() {
     const colori = ["#FF0000", "#008000", "#FF69B4"];
-    fetch("/wp-json/gestionale/v1/admin/informazioniNegozio/")
+    fetch("/wp-json/gestionale/v1/admin/informazioniNegozio/",{
+        headers: {
+            "Content-Type": "application/json",
+            'X-WP-Nonce': nonce,
+        },
+    })
         .then((response) => response.json())
         .then((data) => setVariabili(data))
         .catch((error) => console.error("Error:", error));
@@ -303,8 +308,12 @@ function creaCalendario(risorse, mobile = false) {
 
 function eventiOggi(fetchInfo, successCallback, failureCallback) {
     fetch(
-        `/wp-json/gestionale/v1/admin/eventi?start=${fetchInfo.startStr}&end=${fetchInfo.endStr}`
-    )
+        `/wp-json/gestionale/v1/admin/eventi?start=${fetchInfo.startStr}&end=${fetchInfo.endStr}`,{
+        headers: {
+            "Content-Type": "application/json",
+            'X-WP-Nonce': nonce,
+        },
+    })
         .then((response) => response.json())
         .then((data) => {
             successCallback(data);
@@ -481,6 +490,7 @@ function poupup(info, type, calendar) {
             headers: {
                 "Content-Type": "application/json",
                 type: type,
+                'X-WP-Nonce': nonce 
             },
             body: JSON.stringify(data),
         })
@@ -506,6 +516,7 @@ function poupup(info, type, calendar) {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
+                        "X-WP-Nonce": nonce,
                     },
                     body: JSON.stringify({ id: info.event.id }),
                 })
@@ -597,7 +608,7 @@ function aggiornaDurataEvento(info, calendar) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            
+                'X-WP-Nonce': nonce,
             type: "update",
         },
         body: JSON.stringify(data),
@@ -661,7 +672,7 @@ function creaCliente() {
             headers: {
                 "Content-Type": "application/json",
                 type: "create",
-                
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(dataHttp),
         })
@@ -738,7 +749,7 @@ function pagamentoForm() {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                
+                'X-WP-Nonce': nonce,
                 type: "update",
             },
             body: JSON.stringify(data),

@@ -9,6 +9,7 @@ let dati;
 fetch("/wp-json/gestionale/v1/admin/negozio/", {
     headers: {
         "Content-Type": "application/json",
+        "X-WP-Nonce": nonce,
     },
 })
     .then((response) => response.json())
@@ -22,7 +23,7 @@ fetch("/wp-json/gestionale/v1/admin/negozio/", {
                 loadContent();
             }
         }
-    }) 
+    })
     .catch((error) => {
         console.error(error);
         alert("Error: " + error);
@@ -65,6 +66,7 @@ function pausaPranzo() {
             headers: {
                 "Content-Type": "application/json",
                 type: "pausaPranzo",
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(data),
         })
@@ -147,6 +149,7 @@ function giorniEccezionali() {
             headers: {
                 "Content-Type": "application/json",
                 type: "eccezionali",
+                "X-WP-Nonce": nonce,
             },
 
             body: JSON.stringify(data),
@@ -174,6 +177,7 @@ function removeDay(target) {
         headers: {
             type: "delete",
             "Content-Type": "application/json",
+            "X-WP-Nonce": nonce,
         },
         body: JSON.stringify(giorno),
     })
@@ -237,6 +241,7 @@ function orariNegozio() {
             headers: {
                 "Content-Type": "application/json",
                 type: "gestioneApertura",
+                "X-WP-Nonce": nonce,
             },
 
             body: JSON.stringify(data),

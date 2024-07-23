@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function aggiungiInformazioni() {
-     fetch('/wp-json/gestionale/v1/admin/servizi/')
+     fetch('/wp-json/gestionale/v1/admin/servizi/?_wpnonce=' + nonce)
          .then(response => response.json())
          .then(data => mostra(data))
          .catch((error) => console.error('Error:', error));
@@ -175,24 +175,25 @@ function gestisciEventi() {
         const servizio = {
             id: formServizi.id_servizio,
         }
-        fetch('/wp-json/gestionale/v1/admin/servizi/', {
-            method: 'DELETE',
+        fetch("/wp-json/gestionale/v1/admin/servizi/", {
+            method: "DELETE",
             headers: {
-                'Content-Type': 'application/json',
-                'type': "delete",
+                "Content-Type": "application/json",
+                type: "delete",
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(servizio),
         })
-            .then(response => response.json())
-            .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
                 if (data != "OK") {
-                    alert("Operazione non consentita dal server" + data)
+                    alert("Operazione non consentita dal server" + data);
                     return;
                 }
                 location.reload();
             })
             .catch((error) => {
-                alert('Error:', error);
+                alert("Error:", error);
             });
     })
     submitFormCategorie(formCategorie)
@@ -216,25 +217,26 @@ function submitFormServizi(form) {
             id: form.id_servizio
         };
         console.log(form.type)
-        fetch('/wp-json/gestionale/v1/admin/servizi/', {
-            method: 'POST',
+        fetch("/wp-json/gestionale/v1/admin/servizi/", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'type': form.type,
+                "Content-Type": "application/json",
+                type: form.type,
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(servizio),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
                 if (data != "OK") {
-                    alert("Operazione non consentita dal server" + data)
+                    alert("Operazione non consentita dal server" + data);
                     return;
                 }
                 location.reload();
             })
             .catch((error) => {
-                alert('Error:', error);
+                alert("Error:", error);
             });
     }
 }
@@ -251,25 +253,26 @@ function submitFormCategorie(form) {
             nome: form.nomeCategoria.value,
             id: form.categoriaId
         };
-        fetch('/wp-json/gestionale/v1/admin/categorie/', {
-            method: 'POST',
+        fetch("/wp-json/gestionale/v1/admin/categorie/", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'type': form.type,
+                "Content-Type": "application/json",
+                type: form.type,
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(categoria),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
                 if (data != "OK") {
-                    alert("Operazione non consentita dal server" + data)
+                    alert("Operazione non consentita dal server" + data);
                     return;
                 }
                 location.reload();
             })
             .catch((error) => {
-                alert('Error:', error);
+                alert("Error:", error);
             });
     }
 }

@@ -33,7 +33,10 @@ function redirect($directory)
         include plugin_dir_path(__FILE__) . $directory;
         $content = ob_get_clean();
         $pluginPath = str_replace("/web/htdocs/", 'https://', plugin_dir_path(__FILE__));
-        $content .= "\n" . '<script> const pluginLocation ="' . $pluginPath . '" </script>';
+        $content = "<script defer> 
+        const pluginLocation ='$pluginPath'; 
+        const nonce = '" . wp_create_nonce('wp_rest') . "';
+        </script>" . $content;
         $content .= file_get_contents(plugin_dir_path(__FILE__) . "/templates/menu.html");
         echo $content;
         exit;

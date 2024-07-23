@@ -2,6 +2,7 @@ async function fetchData() {
     return fetch("/wp-json/gestionale/v1/admin/prodotti/", {
         headers: {
             "Content-Type": "application/json",
+            "X-WP-Nonce": nonce,
         },
     })
         .then((response) => response.json())
@@ -114,6 +115,7 @@ function submitUpdateProduct(form) {
             headers: {
                 "Content-Type": "application/json",
                 type: type,
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(data),
         })
@@ -150,6 +152,7 @@ function newProductCreation() {
             headers: {
                 "Content-Type": "application/json",
                 type: "create",
+                "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(data),
         })

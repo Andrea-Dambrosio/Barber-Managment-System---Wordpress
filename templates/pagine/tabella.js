@@ -1,5 +1,5 @@
 async function fetchData() {
-    const response = await fetch("/wp-json/gestionale/v1/admin/tabella/");
+    const response = await fetch("/wp-json/gestionale/v1/admin/tabella/?_wpnonce=" + nonce);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     } else {
@@ -15,8 +15,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await fetchData();
     createTables(data.team, data.servizi);
     addDataToTables(data.righe);
-    // loadRowsService(data.dati_tabella, data.importo_team, tbody, data.importi_prodotti);
-    // testFetch()
 });
 function addDataToTables(rows) {
     rows.forEach((row) => {

@@ -78,7 +78,7 @@ html,body{
     width: 85%;
     display: inline-block;
 }
-#seleziona{
+#scissors{
     display: flex;
     align-items: center;
     justify-content: center;

@@ -4,10 +4,13 @@
 #updateProduct{
     padding: 10px 20px;
 }
-tr{
+tbody{
     cursor: pointer;
     transition: background-color 0.3s;
 }
 tr:hover{
     background-color: #a7a7a7;
+}
+.disabled{
+    cursor: not-allowed;
 }

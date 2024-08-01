@@ -11,7 +11,7 @@ fetch("/wp-json/gestionale/v1/admin/negozio/", {
         "Content-Type": "application/json",
         "X-WP-Nonce": nonce,
     },
-})
+}) 
     .then((response) => response.json())
     .then((data) => {
         if (data == "KO") {

@@ -21,7 +21,8 @@ fetch(fetchUrl)
     .then((response) => response.json())
     .then((data) => main(data))
     .catch((error) => console.error(error));
-    const today = new Date();
+
+    let today = new Date();
 function datePicker(dati, timepicker, confirmButton, dateNonDisponibili) {
     let lunch = {};
     dati.team.forEach((membro) => {
@@ -348,8 +349,17 @@ async function main(data) {
             document.addEventListener("DOMContentLoaded", resolve);
         }
     });
-    console.log(JSON.parse(JSON.stringify(data)));
     console.log(data);
+    let closing;
+    try {
+        closing = data.orarioChiusura[today.getDay()].end.split(":")[0];
+        if (today.getHours() >= closing) {
+            today.setDate(today.getDate() + 1);
+        }
+    } catch (e) {
+        console.log("Barberia chiusa oggi");
+        today.setDate(today.getDate() + 1);
+    }
     riepilogo(data.servizi);
     teamDisponibile(data);
     data.disponibilita[0] = unisciSlot(JSON.parse(JSON.stringify(data)).disponibilita);

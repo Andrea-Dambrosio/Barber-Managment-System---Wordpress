@@ -42,12 +42,7 @@ function getData($wpdb)
         return check_error($gestioneApertura, $wpdb->last_error);
     }
     $utenti = getTeamDb($prefix, ["ID", "display_name"], ["inizio_pranzo", "fine_pranzo"]);
-    // $utenti = $wpdb->get_results(
-    //     "SELECT ID as id, display_name as nome, fine_pranzo, inizio_pranzo
-    //      FROM " . $wpdb->prefix . "users
-    //      where id != 1
-    //      "
-    // );
+
     if (check_error($gestioneApertura, $wpdb->last_error) != "OK") {
         return check_error($gestioneApertura, $wpdb->last_error);
     }

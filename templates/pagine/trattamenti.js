@@ -1,77 +1,155 @@
-let serviziDb
-let serviziDom
-let categorieDb
-let categorieDom
-let membriDb
-document.addEventListener("DOMContentLoaded", function () {
-    aggiungiInformazioni()
+let services;
+let checkTeamMembers;
+
+const promise = fetchTheData()
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const main = new Main();
+    const data = await promise
+    console.log(data)
+    main.load(data);
+    checkTeamMembers.domElements = document.querySelectorAll("#membri input");
+    reload = main.reload;
 });
 
-function aggiungiInformazioni() {
-     fetch('/wp-json/gestionale/v1/admin/servizi/?_wpnonce=' + nonce)
-         .then(response => response.json())
-         .then(data => mostra(data))
-         .catch((error) => console.error('Error:', error));
-    function mostra(data) {
-        serviziDb = data.servizi
-        categorieDb = data.categorie
-        utentiDb = data.utenti
-        const serviziElement = document.getElementById('servizi');
-        const fragment = document.createDocumentFragment();
-        for (let i = 0; i < serviziDb.length; i++) {
-            const p = document.createElement('p');
-            p.id = serviziDb[i].id;
-            p.textContent = serviziDb[i].nome;
-            fragment.appendChild(p);
+async function fetchTheData(team = "true") {
+        try {
+            const response = await fetch(
+                "/wp-json/gestionale/v1/admin/servizi/?_wpnonce=" + nonce,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        team: team,
+                    },
+                }
+            );
+            return await response.json();
+        } catch (e) {
+            alert("Error: " + e);
+            console.error(e);
         }
-        serviziElement.appendChild(fragment);
-        serviziDom = document.querySelectorAll("#servizi p");
-        mostraCategorie()
-        mostraUtenti()
-        gestisciEventi()
+    }
 
-    }
-    function mostraCategorie() {
-        const categorieElement = document.getElementById('categorie');
-        const fragment = document.createDocumentFragment();
-        const optionFragment = document.createDocumentFragment();
-        for (let i = 0; i < categorieDb.length; i++) {
-            const p = document.createElement('p');
-            p.id = categorieDb[i].id;
-            p.textContent = categorieDb[i].nome;
-            fragment.appendChild(p);
-            const option = document.createElement('option');
-            option.value = categorieDb[i].id;
-            option.textContent = categorieDb[i].nome;
-            optionFragment.appendChild(option);
-        }
-        categorieElement.appendChild(fragment);
-        document.querySelector("#categoria-select").appendChild(optionFragment);
-        categorieDom = document.querySelectorAll("#categorie p");
-    }
-    function mostraUtenti(){
-        const utentiElement = document.getElementById('membri');
-        const template = document.querySelector("#membri > div:nth-child(2)")
-        const ids = (id) =>{
-            template.querySelector("input").id = id
-            template.querySelector("label").htmlFor = id
-        }
-        const fragment = document.createDocumentFragment();
-        for (let i = 0; i < utentiDb.length; i++) {
-            template.querySelector("input").value = utentiDb[i].id
-            template.querySelector("label").for = utentiDb[i].id
-            template.querySelector("label").innerText = utentiDb[i].display_name
-            ids("membro" + utentiDb[i].id)
-            fragment.appendChild(template.cloneNode(true));
-        }
-        template.remove()
-        utentiElement.appendChild(fragment);
+class Main {
+    loadContent;
+    sidebarResearch;
+    manageClientEvents;
+    categories;
+
+    constructor() {
+        this.loadContent = new LoadContent();
+        this.sidebarResearch = new SidebarResearch();
+        this.manageClientEvents = new ManageClientEvents();
     }
     
+    load(data) {
+        this.updateData(data); // set the global variables
+        this.loadContent.update(); // set services and categories
+        this.loadContent.loadTeam(data.team); // set team members
+        this.sidebarResearch.update(); // set the sidebar research
+        this.manageClientEvents.addAllTheEventListener(); // add the event listners
+    }
+    reload = async () => {
+        const data = await fetchTheData("false");
+        console.log(data);
+        this.updateData(data); // update global varibales
+        this.loadContent.update(); // update services and categories
+        this.sidebarResearch.update(); // update the references for the sidebar
+    };
+    updateData(data) {
+        services = data.services;
+        this.loadContent.categories = data.categories;
+    }
 }
-function ricercaServizi() {
-    document.querySelector("#ricerca").addEventListener("input", function () {
-        const ricerca = this.value.toLowerCase();
+class LoadContent {
+    // services and categories needs dynamic update
+    servicesContainer;
+    categoriesContainer;
+    categories;
+    constructor() {
+        this.servicesContainer = document.getElementById("servizi");
+        this.categoriesContainer = document.getElementById("categorie");
+        this.categoriesOptionForm = document.querySelector("#categoria-select");
+    }
+    update() {
+        this.loadServices();
+        this.loadCategories();
+    }
+    loadServices() {
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < services.length; i++) {
+            const p = document.createElement("p");
+            p.id = services[i].id;
+            p.textContent = services[i].nome;
+            fragment.appendChild(p);
+        }
+        this.servicesContainer.innerHTML = "";
+        this.servicesContainer.appendChild(fragment);
+    }
+    loadCategories() {
+        const fragment = document.createDocumentFragment();
+        const optionFragment = document.createDocumentFragment();
+        const categories = this.categories;
+        for (let i = 0; i < categories.length; i++) {
+            // Side bar to select categories
+            const p = document.createElement("p");
+            p.id = categories[i].id;
+            p.textContent = categories[i].nome;
+            fragment.appendChild(p);
+            // option to select categories for a service into the form
+            const option = document.createElement("option");
+            option.value = categories[i].id;
+            option.textContent = categories[i].nome;
+            optionFragment.appendChild(option);
+        }
+        this.categoriesContainer.innerHTML = "";
+        this.categoriesOptionForm.innerHTML = "";
+        this.categoriesContainer.appendChild(fragment);
+        this.categoriesOptionForm.appendChild(optionFragment);
+    }
+    loadTeam(teamMember) {
+        const template = document.querySelector("#membri > div:nth-child(2)");
+        // to connect the label
+        const ids = (id) => {
+            template.querySelector("input").id = id;
+            template.querySelector("label").htmlFor = id;
+        };
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < teamMember.length; i++) {
+            template.querySelector("input").value = teamMember[i].id;
+            template.querySelector("label").innerText =
+                teamMember[i].display_name;
+            ids("membro" + teamMember[i].id);
+            fragment.appendChild(template.cloneNode(true));
+        }
+        template.remove();
+        document.getElementById("membri").appendChild(fragment);
+    }
+}
+class SidebarResearch {
+    serviziDom;
+    categoriesDom;
+    constructor() {
+        this.setEventListners();
+    }
+    update() {
+        this.serviziDom = document.querySelectorAll("#servizi p");
+        this.categoriesDom = document.querySelectorAll("#categorie p");
+    }
+    setEventListners() {
+        // services
+        document
+            .querySelector("#ricerca")
+            .addEventListener("input", this.searchServices);
+
+        // categories
+        document
+            .querySelector("#ricerca-categorie")
+            .addEventListener("input", this.searchServices);
+    }
+    searchServices = (e) => {
+        const serviziDom = this.serviziDom;
+        const ricerca = e.target.value.toLowerCase();
         for (let i = 0; i < serviziDom.length; i++) {
             const nome = serviziDom[i].textContent.toLowerCase();
             if (nome.includes(ricerca)) {
@@ -80,101 +158,147 @@ function ricercaServizi() {
                 serviziDom[i].style.display = "none";
             }
         }
-    })
-}
-function ricercaCategorie() {
-    document.querySelector("#ricerca-categorie").addEventListener("input", function () {
-        const ricerca = this.value.toLowerCase();
-        for (let i = 0; i < categorieDom.length; i++) {
-            
-            const nome = categorieDom[i].textContent.toLowerCase();
+    };
+    searchCategories = (e) => {
+        const categoriesDom = this.categoriesDom;
+        const ricerca = e.target.value.toLowerCase();
+        for (let i = 0; i < categoriesDom.length; i++) {
+            const nome = categoriesDom[i].textContent.toLowerCase();
             if (nome.includes(ricerca)) {
-                categorieDom[i].style.display = "block";
+                categoriesDom[i].style.display = "block";
             } else {
-                categorieDom[i].style.display = "none";
+                categoriesDom[i].style.display = "none";
             }
         }
-    })
+    };
 }
-function gestisciEventi() {
-    ricercaServizi()
-    ricercaCategorie()
-    const formCategorie = document.getElementById("categoria-form");
-    const formServizi = document.querySelector("#trattamento");
-    formServizi.nomeServizio = document.getElementById('nome-servizio');
-    formServizi.categoriaSelect = document.getElementById('categoria-select');
-    function displayFormCategorie(){
-        formCategorie.style.display = "block";
-        formServizi.style.display = "none";
-        document.querySelector("#seleziona").style.display = "none";
-    }
-    function displayFormServizi(){
-        formCategorie.style.display = "none";
-        formServizi.style.display = "block";
-        document.querySelector("#seleziona").style.display = "none";
-    }
-    document.querySelector("#create-categoria").addEventListener("click", () => {
-        displayFormCategorie()
-        formCategorie.nomeCategoria.value = "";
-        formCategorie.type = "create";
-        document.querySelector("#categoria-form button").innerText = "Crea categoria";
-    })
-    document.querySelectorAll("#categorie p").forEach(categoria => {
-        categoria.addEventListener("click", function () {
-            displayFormCategorie()
-            formCategorie.type = "update";
-            formCategorie.nomeCategoria.value = categoria.textContent;
-            formCategorie.categoriaId = this.id;
-            document.querySelector("#categoria-form button").innerText = "Aggiorna categoria";
-        })
-    })
 
-    document.querySelector("#create").addEventListener("click", function () {
-        displayFormServizi()
+class ManageClientEvents {
+    formCategorie;
+    formServizi;
+    scissors;
+    categoriesButton;
+    constructor() {
+        this.formCategorie = document.getElementById("categoria-form");
+        this.formServizi = document.querySelector("#trattamento");
+
+        this.formServizi.nomeServizio =
+            document.getElementById("nome-servizio");
+        this.formServizi.categoriaSelect =
+            document.getElementById("categoria-select");
+
+        this.scissors = document.querySelector("#scissors");
+        this.categoriesButton = document.querySelector(
+            "#categoria-form button"
+        );
+    }
+    addEvent(query, type, witchFunction) {
+        document.querySelector(query).addEventListener(type, witchFunction);
+    }
+    addAllTheEventListener() {
+        const addEvent = this.addEvent;
+        addEvent("#create-categoria", "click", this.createCategoryClickEvent);
+        addEvent("#categorie", "click", this.modifyCategoryClickEvent);
+        addEvent("#create", "click", this.createServiceClickEvent);
+        addEvent("#servizi", "click", this.modifyServiceClickEvent);
+        addEvent("#elimina-servizio", "click", this.deleteServiceClickEvent);
+        this.formCategorie.addEventListener(
+            "submit",
+            this.submitFormCategories
+        );
+        this.formServizi.addEventListener("submit", this.submitFormServizi);
+    }
+    // witch is bool, true for display the service form
+    displayTheForm(witch) {
+        this.formCategorie.style.display = witch ? "none" : "block";
+        this.formServizi.style.display = witch ? "block" : "none";
+        this.scissors.style.display = "none";
+    }
+    // ARROW FUNCTION TO MAINTAIN THE SCOPE OF THIS
+    // CATEGORIES
+    createCategoryClickEvent = () => {
+        this.displayTheForm(false);
+        this.formCategorie.nomeCategoria.value = "";
+        this.formCategorie.type = "create";
+        this.categoriesButton.innerText = "Crea categoria";
+    };
+    modifyCategoryClickEvent = (e) => {
+        this.displayTheForm(false);
+        this.formCategorie.type = "update";
+        this.formCategorie.nomeCategoria.value = e.target.textContent;
+        this.formCategorie.categoriaId = e.target.id;
+        this.categoriesButton.innerText = "Aggiorna categoria";
+    };
+    // SERVICES
+    createServiceClickEvent = () => {
+        const formServizi = this.formServizi;
+        this.displayTheForm(true);
         formServizi.type = "create";
         formServizi.nomeServizio.value = "";
         formServizi.id_servizio = "";
         formServizi.categoriaSelect.querySelector(`option`).selected = true;
         formServizi.prezzo.value = "0";
-        formServizi.querySelectorAll("#membri input").forEach(input => {
+        formServizi.querySelectorAll("#membri input").forEach((input) => {
             input.checked = false;
-        })
+        });
         formServizi.descrizione.value = "";
-        document.querySelector("#trattamento button").innerText = "Crea servizio";
-    })
-    document.querySelectorAll("#servizi p").forEach(elemento => {
-        elemento.addEventListener("click", function () {
-            displayFormServizi()
-            const servizio = serviziDb.find(servizio => servizio.id === this.id);
-            formServizi.type = "update";
-            formServizi.nomeServizio.value = servizio.nome;
-            formServizi.id_servizio = this.id;
-            formServizi.categoriaSelect.querySelector(`option[value="${servizio.id_categoria}"]`).selected = true;
-            formServizi.prezzo.value = servizio.prezzo;
+        document.querySelector("#trattamento button").innerText =
+            "Crea servizio";
+    };
+    modifyServiceClickEvent = (e) => {
+        const formServizi = this.formServizi;
+        this.displayTheForm(true);
+        // find the service
+        const servizio = services.find(
+            (servizio) => servizio.id === e.target.id
+        );
+        //UPDATE THE DATA IN THE FORM
+        formServizi.type = "update";
+        formServizi.nomeServizio.value = servizio.nome;
+        formServizi.id_servizio = servizio.id;
+        formServizi.categoriaSelect.querySelector(
+            `option[value="${servizio.id_categoria}"]`
+        ).selected = true;
+        formServizi.prezzo.value = servizio.prezzo;
 
-            const membri= servizio.id_membri.split(',');
-            formServizi.querySelectorAll("#membri input").forEach(input => {
-                input.checked = false;
-            })
-            membri.forEach(membro => {
-                formServizi.querySelector(`input[value="${membro}"]`).checked = true;
-            })
-            formServizi.querySelector(`#durata option[value='${servizio.tempo}']`).selected = true;
-            formServizi.descrizione.value = servizio.descrizione;
-            document.querySelector("#trattamento button").innerText = "Aggiorna servizio";
-        })
-    })
-    document.querySelector("#elimina-servizio").addEventListener("click", function (e) {
+        // select the team members
+        const membri = servizio.id_membri.split(",");
+        formServizi.querySelectorAll("#membri input").forEach((input) => {
+            input.checked = false;
+        });
+        membri.forEach((membro) => {
+            formServizi.querySelector(
+                `input[value="${membro}"]`
+            ).checked = true;
+        });
+        // select the duration
+        formServizi.querySelector(
+            `#durata option[value='${servizio.tempo}']`
+        ).selected = true;
+
+        formServizi.descrizione.value = servizio.descrizione;
+        document.querySelector("#trattamento button").innerText =
+            "Aggiorna servizio";
+    };
+    // DELETING
+    deleteServiceClickEvent = () => {
+        const formServizi = this.formServizi;
+        // check the input
         if (formServizi.id_servizio == null) {
             alert("Seleziona un servizio da eliminare");
-            return
-        }
-        if (!confirm("Sei sicuro di voler eliminare questo prodotto? Verranno eliminati i relativi appuntamenti")) {
             return;
         }
+        const confirmation = confirm(
+            "Sei sicuro di voler eliminare questo prodotto? Verranno eliminati i relativi appuntamenti"
+        );
+        if (!confirmation) {
+            return;
+        }
+
+        // update to the server
         const servizio = {
             id: formServizi.id_servizio,
-        }
+        };
         fetch("/wp-json/gestionale/v1/admin/servizi/", {
             method: "DELETE",
             headers: {
@@ -190,38 +314,43 @@ function gestisciEventi() {
                     alert("Operazione non consentita dal server" + data);
                     return;
                 }
-                location.reload();
+                this.createServiceClickEvent();
+                reload();
             })
             .catch((error) => {
                 alert("Error:", error);
             });
-    })
-    submitFormCategorie(formCategorie)
-    submitFormServizi(formServizi)
-}
-function submitFormServizi(form) {
-    form.addEventListener("submit", function (e) {
+    };
+
+    submitFormServizi = (e) => {
         e.preventDefault();
-        if (confirm("Sei sicuro di voler eseguire questa operazione?")) {
-            create()
+        if (!checkTeamMembers.check()) {
+            alert("Seleziona un membro del team");
+            return;
         }
-    })
-    function create(){
+        if (!confirm("Sei sicuro di voler eseguire questa operazione?")) return;
+
+        const servicesForm = this.formServizi;
+        // group all the data
         const servizio = {
-            nome: form.nomeServizio.value,
-            id_categoria: form.categoriaSelect.value,
-            prezzo: form.prezzo.value,
-            tempo: form.durata.options[form.durata.selectedIndex].value,
-            id_membri: Array.from(form.querySelectorAll("#membri input:checked")).map(input => input.value),
-            descrizione: form.descrizione.value,
-            id: form.id_servizio
+            nome: servicesForm.nomeServizio.value,
+            id_categoria: servicesForm.categoriaSelect.value,
+            prezzo: servicesForm.prezzo.value,
+            tempo: servicesForm.durata.options[
+                servicesForm.durata.selectedIndex
+            ].value,
+            id_membri: Array.from(
+                servicesForm.querySelectorAll("#membri input:checked")
+            ).map((input) => input.value),
+            descrizione: servicesForm.descrizione.value,
+            id: servicesForm.id_servizio,
         };
-        console.log(form.type)
         fetch("/wp-json/gestionale/v1/admin/servizi/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                type: form.type,
+                // update or create
+                type: servicesForm.type,
                 "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(servizio),
@@ -231,33 +360,36 @@ function submitFormServizi(form) {
                 console.log(data);
                 if (data != "OK") {
                     alert("Operazione non consentita dal server" + data);
+                    console.error(data);
                     return;
                 }
-                location.reload();
+                if (servicesForm.type == "create")
+                    this.createServiceClickEvent();
+
+                reload();
             })
             .catch((error) => {
+                console.error(error);
                 alert("Error:", error);
             });
-    }
-}
-function submitFormCategorie(form) {
-    form.addEventListener("submit", function (e) {
+    };
+    submitFormCategories = (e) => {
+        const categoriesForm = this.formCategorie;
         e.preventDefault();
-        if (confirm("Sei sicuro di voler eseguire questa operazione?")) {
-            create()
-        }
-    })
-    
-    function create() {
+        if (!confirm("Sei sicuro di voler eseguire questa operazione?")) return;
+
+        // group the data
+
         const categoria = {
-            nome: form.nomeCategoria.value,
-            id: form.categoriaId
+            nome: categoriesForm.nomeCategoria.value,
+            id: categoriesForm.categoriaId,
         };
         fetch("/wp-json/gestionale/v1/admin/categorie/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                type: form.type,
+                // update or create
+                type: categoriesForm.type,
                 "X-WP-Nonce": nonce,
             },
             body: JSON.stringify(categoria),
@@ -267,15 +399,20 @@ function submitFormCategorie(form) {
                 console.log(data);
                 if (data != "OK") {
                     alert("Operazione non consentita dal server" + data);
+                    console.error(data);
                     return;
                 }
-                location.reload();
+                if (categoriesForm.type == "create")
+                    this.createCategoryClickEvent();
+                reload();
             })
             .catch((error) => {
+                console.error(error);
                 alert("Error:", error);
             });
-    }
+    };
 }
+
 function mostraServizi() {
     document.querySelector(".servizi").style.display = "block";
     document.querySelector("#servizi-nav").classList.add("active");
@@ -283,10 +420,24 @@ function mostraServizi() {
     document.querySelector(".categorie").style.display = "none";
 }
 function mostraCategorie() {
-    document.querySelectorAll(".servizi").forEach(servizio => {
+    document.querySelectorAll(".servizi").forEach((servizio) => {
         servizio.style.display = "none";
-    })
+    });
     document.querySelector("#servizi-nav").classList.remove("active");
     document.querySelector("#categorie-nav").classList.add("active");
     document.querySelector(".categorie").style.display = "block";
 }
+
+
+checkTeamMembers = {
+    domElements: [],
+    check: () => {
+        const domElements = checkTeamMembers.domElements;
+        const checked = [];
+        domElements.forEach((element) => {
+            checked.push(element.checked);
+        });
+        return checked.includes(true);
+    },
+};
+

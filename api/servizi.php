@@ -24,11 +24,16 @@ function getForServiziPage($request)
     $categories = $wpdb->get_results(
         "SELECT DISTINCT * FROM " . $prefix . "gestionale_categorie"
     );
-    $utenti = getTeamDb($prefix, ["ID", 'display_name']);
+
+    if ($request->get_header('team') == 'true')
+        $utenti = getTeamDb($prefix, ["ID", 'display_name', 'user_email']);
+    else
+        $utenti = [];
+
     $data = array(
-        'servizi' => $servizi,
-        'categorie' => $categories,
-        'utenti' => $utenti
+        'services' => $servizi,
+        'categories' => $categories,
+        'team' => $utenti
     );
     return $data;
 }
@@ -264,14 +269,14 @@ function getTeamDb($prefix, $fields, $meta = [])
             "fields" => $fields,
         ]
     );
-    if(empty($meta)){
+    if (empty($meta)) {
         return $users;
     }
     // trasforma in array
     foreach ($users as &$user) {
-        $user = (array) $user; 
+        $user = (array) $user;
         foreach ($meta as $value) {
-            $user[$value] = get_user_meta($user['ID'], $value, true); 
+            $user[$value] = get_user_meta($user['ID'], $value, true);
         }
     }
     unset($user);

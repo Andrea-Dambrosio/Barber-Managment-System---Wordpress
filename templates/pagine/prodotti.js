@@ -31,12 +31,17 @@ template.dataset.bsToggle = "offcanvas";
 template.dataset.id = "1";
 template.dataset.bsTarget = "#offcanvasRight";
 template.setAttribute("aria-controls", "offcanvasRight");
-
-function displayData(prodotti) {
+let prodotti
+function displayData(data) {
+    // variabile globale
+    prodotti = data;
     const tbody = document.querySelector("tbody");
     tbody.querySelectorAll("tr").forEach((e) => e.remove());
     if (prodotti.length == 0) {
-
+        template.dataset.id = "";
+        template.dataset.bsToggle = "";
+        template.dataset.bsTarget = "";
+        template.classList.add("disabled")
         tbody.appendChild(template.cloneNode(true));
         return;
     }
@@ -55,10 +60,11 @@ function displayData(prodotti) {
 }
 document.addEventListener("DOMContentLoaded", async () => {
     let data = await fetchData();
+    
     displayData(data.prodotti);
     ricercaTabella();
     const updateForm = document.getElementById("updateProduct");
-    datiProdottoPassaggioOffcanvas(data.prodotti, updateForm);
+    datiProdottoPassaggioOffcanvas(updateForm);
     submitUpdateProduct(updateForm);
     newProductCreation();
 });
@@ -78,7 +84,7 @@ function ricercaTabella() {
             });
         });
 }
-function datiProdottoPassaggioOffcanvas(prodotti, form) {
+function datiProdottoPassaggioOffcanvas(form) {
     const offcanvasElement = document.getElementById("offcanvasRight");
     offcanvasElement.addEventListener("show.bs.offcanvas", function (event) {
         const id = event.relatedTarget.dataset.id;
@@ -88,6 +94,13 @@ function datiProdottoPassaggioOffcanvas(prodotti, form) {
         form.brand.value = prodotto.brand;
         form.prezzo.value = prodotto.prezzo;
         form.quantita.value = prodotto.quantita;
+    });
+    const newOffcanvasElement = document.querySelector("#newProductModal");
+    newOffcanvasElement.addEventListener("show.bs.modal", function (event) {
+        form.nome.value = "";
+        form.brand.value = "";
+        form.prezzo.value = "";
+        form.quantita.value = "";
     });
 }
 function submitUpdateProduct(form) {
